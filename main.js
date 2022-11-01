@@ -25,9 +25,9 @@ const getRandomNumber = function(max) {
  * YOUR CODE BELOW *
  *******************/
  let d6_img = document.querySelector('#d6-roll')
- let d6_mean = document.querySelector('#d6-rolls-mean')
- let d6_median = document.querySelector('#d6-rolls-median')
- let d6_mode = document.querySelector('#d6-rolls-mode')
+ let d6MeanSection = document.querySelector('#d6-rolls-mean')
+ let d6MedianSection = document.querySelector('#d6-rolls-median')
+ let d6ModeSection = document.querySelector('#d6-rolls-mode')
 
  let double6Roll1 = document.querySelector('#double-d6-roll-1')
  let double6Roll2 = document.querySelector('#double-d6-roll-2')
@@ -71,9 +71,11 @@ function roll6Die(){
     sixes.push(num)
     mean = findMean(sixes)
     median = findMedian(sixes)
+    mode = findMode(sixes)
     d6_img.src = `/just-how-we-roll/images/d6/${num}.png`
-    d6_mean.innerText = mean
-    d6_median.innerText = median
+    d6MeanSection.innerText = mean
+    d6MedianSection.innerText = median
+    d6ModeSection.innerText = mode
 }
 
 function rollDoubleDice(){
@@ -84,8 +86,10 @@ function rollDoubleDice(){
     doubleSixes.push(die1, die2)
     mean = findMean(doubleSixes)
     median = findMedian(doubleSixes)
+    mode = findMode(doubleSixes)
     doubleSectionMean.innerText = mean
     doublesSectionMedian.innerText = median
+    doublesSectionMode.innerText = mode
 }
 
 function roll12SidedDie(){
@@ -94,8 +98,10 @@ function roll12SidedDie(){
     twelves.push(num)
     mean = findMean(twelves)
     median = findMedian(twelves)
+    mode = findMode(twelves)
     d12MeanSection.innerText = mean
     d12MedianSection.innerText = median
+    d12ModeSection.innerText = mode
 }
 
 function roll20SidedDie(){
@@ -104,8 +110,10 @@ function roll20SidedDie(){
     twenties.push(num)
     mean = findMean(twenties)
     median = findMedian(twenties)
+    mode = findMode(twenties)
     d20MeanSection.innerText = mean
     d20MedianSection.innerText = median
+    d20ModeSection.innerText = mode
 }
 
 function resetAll(){
@@ -115,9 +123,9 @@ function resetAll(){
     twenties = []
 
     d6_img.src = '/just-how-we-roll/images/start/d6.png'
-    d6_mean.innerText = 'NA'
-    d6_median.innerText = 'NA'
-    d6_mode.innerText = 'NA'
+    d6MeanSection.innerText = 'NA'
+    d6MedianSection.innerText = 'NA'
+    d6ModeSection.innerText = 'NA'
 
     double6Roll1.src = '/just-how-we-roll/images/start/d6.png'
     double6Roll2.src = '/just-how-we-roll/images/start/d6.png'
@@ -152,7 +160,7 @@ function findMean(array){
 
 function findMedian(array){
     array.sort(function(a, b){return a - b})
-    console.log(array)
+    // console.log(array)
     median = array[0]
     if(array.length % 2 === 1){
         midpoint = (array.length / 2) - .5
@@ -166,7 +174,27 @@ function findMedian(array){
 }
 
 function findMode(array){
-    for(let num of array){
-        console.log(num)
+    maxCount = 0
+    mode = []
+    let numsAndCounts = {}
+    console.log(array)
+    for(let x of array){
+        if(x in numsAndCounts){
+            numsAndCounts[x] += 1
+        }
+        else{
+            numsAndCounts[x] = 1
+        }
     }
+    for(let key of Object.keys(numsAndCounts)){
+        if(numsAndCounts[key] === maxCount){
+            mode.push(key)
+        }
+        else if(numsAndCounts[key] > maxCount){
+            maxCount = numsAndCounts[key]
+            mode = []
+            mode.push(key)
+        }
+    }
+    return mode
 }
